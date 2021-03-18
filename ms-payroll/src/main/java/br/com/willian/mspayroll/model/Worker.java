@@ -1,15 +1,10 @@
-package br.com.willian.msworker.model;
+package br.com.willian.mspayroll.model;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-@Table(name = "tb_worker")
 public class Worker implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private Double dailyIncome;
