@@ -2,7 +2,10 @@ package br.com.willian.msworker.controller;
 
 import br.com.willian.msworker.model.Worker;
 import br.com.willian.msworker.service.WorkerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +18,12 @@ import java.util.List;
 @RequestMapping(value = "/workers")
 public class WorkerController {
 
+    @Value("${test.config}")
+    private String testConfig;
+
     private WorkerService service;
+
+    private static Logger logger = LoggerFactory.getLogger(WorkerController.class);
 
     @Autowired
     public WorkerController(WorkerService service) {
@@ -30,5 +38,11 @@ public class WorkerController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Worker> findById(@PathVariable(value = "id") Long id) {
         return ResponseEntity.ok().body(service.findById(id));
+    }
+
+    @GetMapping(value = "/configs")
+    public ResponseEntity<Void> getConfigs () {
+        logger.info("CONFIG = " + testConfig);
+        return ResponseEntity.noContent().build();
     }
 }
