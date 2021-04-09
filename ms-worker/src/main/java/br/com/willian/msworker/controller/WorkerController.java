@@ -20,9 +20,6 @@ import java.util.List;
 @RequestMapping(value = "/workers")
 public class WorkerController {
 
-    @Value("${test.config}")
-    private String testConfig;
-
     private WorkerService service;
 
     private static Logger logger = LoggerFactory.getLogger(WorkerController.class);
@@ -44,7 +41,6 @@ public class WorkerController {
 
     @GetMapping(value = "/configs")
     public ResponseEntity<Void> getConfigs () {
-        logger.info("CONFIG = " + testConfig);
         return ResponseEntity.noContent().build();
     }
 }
