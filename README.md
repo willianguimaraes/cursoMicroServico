@@ -1,7 +1,7 @@
 # cursoMicroServico
 
 #Criando e testando containers Docker
-#Criar rede docker para sistema hr
+#Criar rede docker para sistema ms
 ```
 docker network create ms-course-net
 ```
@@ -13,127 +13,142 @@ docker run -p 5432:5432 --name ms-worker-pg12 --network ms-course-net -e POSTGRE
 
 docker run -p 5433:5432 --name ms-user-pg12 --network ms-course-net -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=db_ms_user postgres:12-alpine &
 ```
-##hr-config-server
+##ms-config-server
 
 ```
 FROM openjdk:11
 VOLUME /tmp
 EXPOSE 8888
-ADD ./target/hr-config-server-0.0.1-SNAPSHOT.jar hr-config-server.jar
-ENTRYPOINT ["java","-jar","/hr-config-server.jar"]
+ADD ./target/ms-config-server-0.0.1-SNAPSHOT.jar ms-config-server.jar
+ENTRYPOINT ["java","-jar","/ms-config-server.jar"]
 ```
 ```
 mvnw clean package
 ```
 ```
-docker build -t hr-config-server:v1 .
+docker build -t ms-config-server:v1 .
 ```
-docker run -p 8888:8888 --name hr-config-server --network ms-course-net -e GITHUB_USER=willianguimaraes -e GITHUB_PASS= ms-config-server:v1
-
-hr-eureka-server
-
+```
+docker run -p 8888:8888 --name ms-config-server --network ms-course-net -e GITHUB_USER=willianguimaraes -e GITHUB_PASS= ms-config-server:v1
+```
+#ms-eureka-server
+```
 FROM openjdk:11
 VOLUME /tmp
 EXPOSE 8761
-ADD ./target/hr-eureka-server-0.0.1-SNAPSHOT.jar hr-eureka-server.jar
-ENTRYPOINT ["java","-jar","/hr-eureka-server.jar"]
-
+ADD ./target/hr-eureka-server-0.0.1-SNAPSHOT.jar ms-eureka-server.jar
+ENTRYPOINT ["java","-jar","/ms-eureka-server.jar"]
+```
+```
 mvnw clean package
+```
+```
+docker build -t ms-eureka-server:v1 .
 
-docker build -t hr-eureka-server:v1 .
-
-docker run -p 8761:8761 --name hr-eureka-server --network ms-course-net ms-eureka-server:v1
-
-hr-worker
-
+docker run -p 8761:8761 --name ms-eureka-server --network ms-course-net ms-eureka-server:v1
+```
+#ms-worker
+```
 FROM openjdk:11
 VOLUME /tmp
-ADD ./target/hr-worker-0.0.1-SNAPSHOT.jar hr-worker.jar
-ENTRYPOINT ["java","-jar","/hr-worker.jar"]
-
+ADD ./target/ms-worker-0.0.1-SNAPSHOT.jar ms-worker.jar
+ENTRYPOINT ["java","-jar","/ms-worker.jar"]
+```
+```
 mvnw clean package -DskipTests
-
-docker build -t hr-worker:v1 .
+```
+```
+docker build -t ms-worker:v1 .
 
 docker run -P --network ms-course-net ms-worker:v1
-
-hr-user
-
+```
+#ms-user
+```
 FROM openjdk:11
 VOLUME /tmp
-ADD ./target/hr-user-0.0.1-SNAPSHOT.jar hr-user.jar
-ENTRYPOINT ["java","-jar","/hr-user.jar"]
-
+ADD ./target/ms-user-0.0.1-SNAPSHOT.jar ms-user.jar
+ENTRYPOINT ["java","-jar","/ms-user.jar"]
+```
+```
 mvnw clean package -DskipTests
+```
+```
+docker build -t ms-user:v1 .
 
-docker build -t hr-user:v1 .
+docker run -P --network ms-course-net ms-user:v1
+```
 
-docker run -P --network hr-net hr-user:v1
-
-hr-payroll
-
+#ms-payroll
+```
 FROM openjdk:11
 VOLUME /tmp
-ADD ./target/hr-payroll-0.0.1-SNAPSHOT.jar hr-payroll.jar
-ENTRYPOINT ["java","-jar","/hr-payroll.jar"]
-
+ADD ./target/ms-payroll-0.0.1-SNAPSHOT.jar ms-payroll.jar
+ENTRYPOINT ["java","-jar","/ms-payroll.jar"]
+```
+```
 mvnw clean package -DskipTests
+```
+```
+docker build -t ms-payroll:v1 .
 
-docker build -t hr-payroll:v1 .
-
-docker run -P --network hr-net hr-payroll:v1
-
-hr-oauth
-
+docker run -P --network ms-couse-net ms-payroll:v1
+```
+#ms-oauth
+```
 FROM openjdk:11
 VOLUME /tmp
-ADD ./target/hr-oauth-0.0.1-SNAPSHOT.jar hr-oauth.jar
-ENTRYPOINT ["java","-jar","/hr-oauth.jar"]
-
+ADD ./target/ms-oauth-0.0.1-SNAPSHOT.jar ms-oauth.jar
+ENTRYPOINT ["java","-jar","/ms-oauth.jar"]
+```
+```
 mvnw clean package -DskipTests
+```
+```
+docker build -t ms-oauth:v1 .
 
-docker build -t hr-oauth:v1 .
-
-docker run -P --network hr-net hr-oauth:v1
-
-hr-api-gateway-zuul
-
+docker run -P --network ms-couse-net ms-oauth:v1
+```
+#ms-api-gateway-zuul
+```
 FROM openjdk:11
 VOLUME /tmp
 EXPOSE 8765
-ADD ./target/hr-api-gateway-zuul-0.0.1-SNAPSHOT.jar hr-api-gateway-zuul.jar
-ENTRYPOINT ["java","-jar","/hr-api-gateway-zuul.jar"]
-
+ADD ./target/ms-api-gateway-0.0.1-SNAPSHOT.jar ms-api-gateway.jar
+ENTRYPOINT ["java","-jar","/ms-api-gateway.jar"]
+```
+```
 mvnw clean package -DskipTests
+```
+```
+docker build -t ms-api-gateway:v1 .
 
-docker build -t hr-api-gateway-zuul:v1 .
-
-docker run -p 8765:8765 --name hr-api-gateway-zuul --network hr-net hr-api-gateway-zuul:v1
-
-Alguns comandos Docker
+docker run -p 8765:8765 --name ms-api-gateway --network ms-course-net ms-api-gateway:v1
+```
+#Alguns comandos Docker
 
 Criar uma rede Docker
-
+```
 docker network create <nome-da-rede>
-
+```
 Baixar imagem do Dockerhub
-
+```
 docker pull <nome-da-imagem:tag>
-
+```
 Ver imagens
-
+```
 docker images
-
+```
 Criar/rodar um container de uma imagem
-
+```
 docker run -p <porta-externa>:<porta-interna> --name <nome-do-container> --network <nome-da-rede> <nome-da-imagem:tag> 
-
+```
 Listar containers
-
+```
 docker ps
 
 docker ps -a
-
+```
 Acompanhar logs do container em execução
-
+```
 docker logs -f <container-id>
+```
