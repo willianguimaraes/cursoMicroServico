@@ -9,9 +9,9 @@ docker network create ms-course-net
 ```
 docker pull postgres:12-alpine
 
-docker run -p 5432:5432 --name ms-worker-pg12 --network ms-course-net -e POSTGRES_PASSWORD=1234567 -e POSTGRES_DB=db_ms_worker postgres:12-alpine
+docker run -p 5432:5432 --name ms-worker-pg12 --network ms-course-net -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=db_ms_worker postgres:12-alpine &
 
-docker run -p 5432:5432 --name ms-user-pg12 --network ms-course-net -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=db_ms_user postgres:12-alpine
+docker run -p 5433:5432 --name ms-user-pg12 --network ms-course-net -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=db_ms_user postgres:12-alpine &
 ```
 ##hr-config-server
 
