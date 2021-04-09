@@ -3,15 +3,15 @@
 #Criando e testando containers Docker
 #Criar rede docker para sistema hr
 ```
-docker network create hr-net
+docker network create ms-course-net
 ```
 #Testando perfil dev com Postgresql no Docker
 ```
 docker pull postgres:12-alpine
 
-docker run -p 5432:5432 --name hr-worker-pg12 --network hr-net -e POSTGRES_PASSWORD=1234567 -e POSTGRES_DB=db_hr_worker postgres:12-alpine
+docker run -p 5432:5432 --name ms-worker-pg12 --network ms-course-net -e POSTGRES_PASSWORD=1234567 -e POSTGRES_DB=db_ms_worker postgres:12-alpine
 
-docker run -p 5432:5432 --name hr-user-pg12 --network hr-net -e POSTGRES_PASSWORD=1234567 -e POSTGRES_DB=db_hr_user postgres:12-alpine
+docker run -p 5432:5432 --name ms-user-pg12 --network ms-course-net -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=db_ms_user postgres:12-alpine
 ```
 ##hr-config-server
 
@@ -28,7 +28,7 @@ mvnw clean package
 ```
 docker build -t hr-config-server:v1 .
 ```
-docker run -p 8888:8888 --name hr-config-server --network hr-net -e GITHUB_USER=acenelio -e GITHUB_PASS= hr-config-server:v1
+docker run -p 8888:8888 --name hr-config-server --network ms-course-net -e GITHUB_USER=willianguimaraes -e GITHUB_PASS= ms-config-server:v1
 
 hr-eureka-server
 
@@ -42,7 +42,7 @@ mvnw clean package
 
 docker build -t hr-eureka-server:v1 .
 
-docker run -p 8761:8761 --name hr-eureka-server --network hr-net hr-eureka-server:v1
+docker run -p 8761:8761 --name hr-eureka-server --network ms-course-net ms-eureka-server:v1
 
 hr-worker
 
@@ -55,7 +55,7 @@ mvnw clean package -DskipTests
 
 docker build -t hr-worker:v1 .
 
-docker run -P --network hr-net hr-worker:v1
+docker run -P --network ms-course-net ms-worker:v1
 
 hr-user
 
