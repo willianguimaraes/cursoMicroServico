@@ -36,7 +36,7 @@ docker run -p 8888:8888 --name ms-config-server --network ms-course-net -e GITHU
 FROM openjdk:11
 VOLUME /tmp
 EXPOSE 8761
-ADD ./target/hr-eureka-server-0.0.1-SNAPSHOT.jar ms-eureka-server.jar
+ADD ./target/eureka-server-0.0.1-SNAPSHOT.jar ms-eureka-server.jar
 ENTRYPOINT ["java","-jar","/ms-eureka-server.jar"]
 ```
 ```
@@ -108,12 +108,12 @@ docker build -t ms-oauth:v1 .
 
 docker run -P --network ms-couse-net ms-oauth:v1
 ```
-#ms-api-gateway-zuul
+#ms-api-gateway
 ```
 FROM openjdk:11
 VOLUME /tmp
 EXPOSE 8765
-ADD ./target/ms-api-gateway-0.0.1-SNAPSHOT.jar ms-api-gateway.jar
+ADD ./target/api-gateway-0.0.1-SNAPSHOT.jar ms-api-gateway.jar
 ENTRYPOINT ["java","-jar","/ms-api-gateway.jar"]
 ```
 ```
